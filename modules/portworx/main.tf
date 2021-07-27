@@ -6,13 +6,28 @@
 data ibm_resource_group group {
   name = var.resource_group_name
 }
+
+data ibm_container_cluster this{
+  count = var.enable && !var.on_vpc ? 1 : 0
+  name = var.cluster_id
+  resource_group_id = data.ibm_resource_group.group.id
+}
+
+data "ibm_container_cluster_worker"{
+  count = var.enable && !var.on_vpc ? var.worker_nodes : 0
+
+  cluster_name_id   = var.cluster_id
+  resource_group_id = data.ibm_resource_group.group.id
+  worker_id         = length(data.ibm_container_cluster.this) > 0 ? data.ibm_container_cluster.this[0].workers[count.index] : 0
+}
+
 data ibm_container_vpc_cluster this{
-  count = var.enable ? 1 : 0
+  count = var.enable && var.on_vpc ? 1 : 0
   name = var.cluster_id
   resource_group_id = data.ibm_resource_group.group.id
 }
 data "ibm_container_vpc_cluster_worker" "this" {
-  count = var.enable ? var.worker_nodes : 0
+  count = var.enable && var.on_vpc ? var.worker_nodes : 0
 
   cluster_name_id   = var.cluster_id
   resource_group_id = data.ibm_resource_group.group.id
@@ -23,9 +38,12 @@ data "ibm_iam_auth_token" "this" {}
 
 # ibm_is_subnet is currently bugged. On a run, it can error with an expired or bad token. A subsequent rerun fixes this, 
 # but this script should run the first time without any problems.
+
 data "ibm_is_subnet" "this" {
   count = var.enable ? var.worker_nodes : 0
-  identifier = length(data.ibm_container_vpc_cluster_worker.this) > 0 ? data.ibm_container_vpc_cluster_worker.this[count.index].network_interfaces[0].subnet_id : 0
+  identifier = var.on_vpc ? length(data.ibm_container_vpc_cluster_worker.this) > 0 ? data.ibm_container_vpc_cluster_worker.this[count.index].network_interfaces[0].subnet_id : 0
+                          : length(data.ibm_container_cluster_worker.this) > 0 ? data.ibm_container_cluster_worker.this[count.index].network_interfaces[0].subnet_id : 0
+
 }
 
 # data "external" "get_zone_from_subnet" {
@@ -44,17 +62,19 @@ data "ibm_is_subnet" "this" {
 #   }
 # }
 
-# Create a block storage volume per worker.
+
+# Create a block storage volume per worker for VPC.
 resource "ibm_is_volume" "this" {
   depends_on = [
     data.ibm_is_subnet.this
   ]
 
-  count = var.enable && var.install_storage ? var.worker_nodes : 0 
+  count = var.enable ? var.worker_nodes : 0 
   
   capacity = var.storage_capacity
   iops = var.storage_profile == "custom" ? var.storage_iops : null
-  name = length(data.ibm_container_vpc_cluster.this) > 0 ? "${var.unique_id}-pwx-${split("-", data.ibm_container_vpc_cluster.this[0].workers[count.index])[4]}" : "${var.unique_id}-pwx"
+  name = var.on_vpc ? length(data.ibm_container_vpc_cluster.this) > 0 ? "${var.unique_id}-pwx-${split("-", data.ibm_container_vpc_cluster.this[0].workers[count.index])[4]}" : "${var.unique_id}-pwx"
+                    : length(data.ibm_container_cluster.this) > 0 ? "${var.unique_id}-pwx-${split("-", data.ibm_container_cluster.this[0].workers[count.index])[4]}" : "${var.unique_id}-pwx"
   profile = var.storage_profile
   resource_group = data.ibm_resource_group.group.id
   zone = length(data.ibm_is_subnet.this) > 0 ? data.ibm_is_subnet.this[count.index].zone : ""
@@ -66,8 +86,7 @@ resource "ibm_is_volume" "this" {
 
 # Attach block storage to worker
 resource "null_resource" "volume_attachment" {
-  # count = length(data.ibm_container_vpc_cluster_worker.worker)
-  count = var.enable && var.install_storage ? var.worker_nodes : 0 
+  count = var.enable ? var.worker_nodes : 0 
 
   depends_on = [
     ibm_is_volume.this,
@@ -76,7 +95,8 @@ resource "null_resource" "volume_attachment" {
   
   triggers = {
     volume = length(ibm_is_volume.this) > 0 ? ibm_is_volume.this[count.index].id : 0
-    worker = length(data.ibm_container_vpc_cluster_worker.this) > 0 ? data.ibm_container_vpc_cluster_worker.this[count.index].id : 0
+    worker = var.on_vpc ? length(data.ibm_container_vpc_cluster_worker.this) > 0 ? data.ibm_container_vpc_cluster_worker.this[count.index].id : 0
+                        : length(data.ibm_container_cluster_worker.this) > 0 ? data.ibm_container_cluster_worker.this[count.index].id : 0
   }
 
   provisioner "local-exec" {
@@ -86,7 +106,9 @@ resource "null_resource" "volume_attachment" {
       REGION            = var.region
       RESOURCE_GROUP_ID = data.ibm_resource_group.group.id
       CLUSTER_ID        = var.cluster_id
-      WORKER_ID         = length(data.ibm_container_vpc_cluster_worker.this) > 0 ? data.ibm_container_vpc_cluster_worker.this[count.index].id : 0
+      WORKER_ID         = var.on_vpc ? length(data.ibm_container_vpc_cluster_worker.this) > 0 ? data.ibm_container_vpc_cluster_worker.this[count.index].id : 0
+                                     : length(data.ibm_container_cluster_worker.this) > 0 ? data.ibm_container_cluster_worker.this[count.index].id : 0
+      
       VOLUME_ID         = length(ibm_is_volume.this) > 0 ? ibm_is_volume.this[count.index].id : 0
     }
 

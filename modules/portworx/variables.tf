@@ -3,6 +3,11 @@ variable "enable" {
     description = "If set to true installs Portworx on the given cluster"
 }
 
+variable "on_vpc" {
+    default     = true
+    description = "Is the cluster infrastructure VPC? true/false"
+}
+
 variable "ibmcloud_api_key" {
   description = "Get the ibmcloud api key from https://cloud.ibm.com/iam/apikeys"
 }
