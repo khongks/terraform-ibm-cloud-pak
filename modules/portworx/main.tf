@@ -13,7 +13,7 @@ data ibm_container_cluster this{
   resource_group_id = data.ibm_resource_group.group.id
 }
 
-data "ibm_container_cluster_worker"{
+data "ibm_container_cluster_worker" "this"{
   count = var.enable && !var.on_vpc ? var.worker_nodes : 0
 
   cluster_name_id   = var.cluster_id
@@ -41,8 +41,8 @@ data "ibm_iam_auth_token" "this" {}
 
 data "ibm_is_subnet" "this" {
   count = var.enable ? var.worker_nodes : 0
-  identifier = var.on_vpc ? length(data.ibm_container_vpc_cluster_worker.this) > 0 ? data.ibm_container_vpc_cluster_worker.this[count.index].network_interfaces[0].subnet_id : 0
-                          : length(data.ibm_container_cluster_worker.this) > 0 ? data.ibm_container_cluster_worker.this[count.index].network_interfaces[0].subnet_id : 0
+  identifier = (var.on_vpc ? (length(data.ibm_container_vpc_cluster_worker.this) > 0 ? data.ibm_container_vpc_cluster_worker.this[count.index].network_interfaces[0].subnet_id : 0) 
+                           : (length(data.ibm_container_cluster_worker.this) > 0 ? data.ibm_container_cluster_worker.this[count.index].network_interfaces[0].subnet_id : 0))
 
 }
 
@@ -73,8 +73,8 @@ resource "ibm_is_volume" "this" {
   
   capacity = var.storage_capacity
   iops = var.storage_profile == "custom" ? var.storage_iops : null
-  name = var.on_vpc ? length(data.ibm_container_vpc_cluster.this) > 0 ? "${var.unique_id}-pwx-${split("-", data.ibm_container_vpc_cluster.this[0].workers[count.index])[4]}" : "${var.unique_id}-pwx"
-                    : length(data.ibm_container_cluster.this) > 0 ? "${var.unique_id}-pwx-${split("-", data.ibm_container_cluster.this[0].workers[count.index])[4]}" : "${var.unique_id}-pwx"
+  name = (var.on_vpc ? (length(data.ibm_container_vpc_cluster.this) > 0 ? "${var.unique_id}-pwx-${split("-", data.ibm_container_vpc_cluster.this[0].workers[count.index])[4]}" : "${var.unique_id}-pwx")
+                     : (length(data.ibm_container_cluster.this) > 0 ? "${var.unique_id}-pwx-${split("-", data.ibm_container_cluster.this[0].workers[count.index])[4]}" : "${var.unique_id}-pwx"))
   profile = var.storage_profile
   resource_group = data.ibm_resource_group.group.id
   zone = length(data.ibm_is_subnet.this) > 0 ? data.ibm_is_subnet.this[count.index].zone : ""
@@ -95,8 +95,8 @@ resource "null_resource" "volume_attachment" {
   
   triggers = {
     volume = length(ibm_is_volume.this) > 0 ? ibm_is_volume.this[count.index].id : 0
-    worker = var.on_vpc ? length(data.ibm_container_vpc_cluster_worker.this) > 0 ? data.ibm_container_vpc_cluster_worker.this[count.index].id : 0
-                        : length(data.ibm_container_cluster_worker.this) > 0 ? data.ibm_container_cluster_worker.this[count.index].id : 0
+    worker = (var.on_vpc ? (length(data.ibm_container_vpc_cluster_worker.this) > 0 ? data.ibm_container_vpc_cluster_worker.this[count.index].id : 0)
+                         : (length(data.ibm_container_cluster_worker.this) > 0 ? data.ibm_container_cluster_worker.this[count.index].id : 0))
   }
 
   provisioner "local-exec" {
@@ -106,8 +106,8 @@ resource "null_resource" "volume_attachment" {
       REGION            = var.region
       RESOURCE_GROUP_ID = data.ibm_resource_group.group.id
       CLUSTER_ID        = var.cluster_id
-      WORKER_ID         = var.on_vpc ? length(data.ibm_container_vpc_cluster_worker.this) > 0 ? data.ibm_container_vpc_cluster_worker.this[count.index].id : 0
-                                     : length(data.ibm_container_cluster_worker.this) > 0 ? data.ibm_container_cluster_worker.this[count.index].id : 0
+      WORKER_ID         = (var.on_vpc ? (length(data.ibm_container_vpc_cluster_worker.this) > 0 ? data.ibm_container_vpc_cluster_worker.this[count.index].id : 0)
+                                      : (length(data.ibm_container_cluster_worker.this) > 0 ? data.ibm_container_cluster_worker.this[count.index].id : 0))
       
       VOLUME_ID         = length(ibm_is_volume.this) > 0 ? ibm_is_volume.this[count.index].id : 0
     }
