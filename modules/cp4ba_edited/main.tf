@@ -40,6 +40,7 @@ data "ibm_container_cluster_config" "cluster_config" {
   network           = false
 }
 
+###################### The code above will be removed from the main.tf ##############################
 #####################################################################################################
 
 locals {
