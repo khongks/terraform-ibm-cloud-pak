@@ -1,21 +1,26 @@
-
-terraform {
-  required_version = ">=0.13"
-  required_providers {
-    ibm = {
-      source = "IBM-Cloud/ibm"
-      version    = "~> 1.12"
-    }
-  }
+provider "ibm" {
+  region     = var.region
+  version    = "~> 1.12"
 }
+
+//terraform {
+//  required_version = ">=0.13"
+//  required_providers {
+//    ibm = {
+//      source = "IBM-Cloud/ibm"
+//      version    = "~> 1.12"
+//    }
+//  }
+//}
 
 data "ibm_resource_group" "group" {
   name = var.resource_group
 }
 
-data "ibm_iam_api_key" "iam_api_key" {
-    apikey_id = var.ibmcloud_api_key
-}
+//data "ibm_iam_api_key" "iam_api_key" {
+//    apikey_id = var.ibmcloud_api_key
+//}
+
 # go in the example
 resource "null_resource" "mkdir_kubeconfig_dir" {
   triggers = { always_run = timestamp() }
