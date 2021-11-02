@@ -1,3 +1,42 @@
+
+terraform {
+  required_version = ">=0.13"
+  required_providers {
+    ibm = {
+      source = "IBM-Cloud/ibm"
+      version    = "~> 1.12"
+    }
+  }
+}
+
+data "ibm_resource_group" "group" {
+  name = var.resource_group
+}
+
+data "ibm_iam_api_key" "iam_api_key" {
+    apikey_id = var.ibmcloud_api_key
+}
+# go in the example
+resource "null_resource" "mkdir_kubeconfig_dir" {
+  triggers = { always_run = timestamp() }
+
+  provisioner "local-exec" {
+    command = "mkdir -p ${local.cluster_config_path}"
+  }
+}
+
+data "ibm_container_cluster_config" "cluster_config" {
+  depends_on = [null_resource.mkdir_kubeconfig_dir]
+  cluster_name_id   = var.cluster_id
+  resource_group_id = data.ibm_resource_group.group.id
+  download          = true
+  config_dir        = local.cluster_config_path
+  admin             = false
+  network           = false
+}
+
+#####################################################################################################
+
 locals {
   cp4ba_storage_class_file              = "${path.module}/files/cp4ba_storage_class.yaml"
   cp4ba_storage_class_file_content      = file(local.cp4ba_storage_class_file)

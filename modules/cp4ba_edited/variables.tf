@@ -1,6 +1,10 @@
-variable "cluster_name_or_id" {
+variable "cluster_id" {
   default     = ""
   description = "Enter your cluster id or name to install the Cloud Pak. Leave blank to provision a new Openshift cluster."
+}
+
+variable "ibmcloud_api_key" {
+  description = "IBMCloud API key (https://cloud.ibm.com/docs/account?topic=account-userapikey#create_user_key)"
 }
 
 variable "region" {
