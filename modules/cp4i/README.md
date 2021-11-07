@@ -110,6 +110,10 @@ terraform plan
 terraform apply
 ```
 
+```
+terraform apply -var-file="cp4i.tfvars"
+```
+
 ## Clean up
 
 When you finish using the cluster, release the resources by executing the following command:
