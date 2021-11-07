@@ -21,8 +21,8 @@ results() {
   exit 0
 }
 
-# POD=$(kubectl get pods -n cpd-meta-ops | grep ibm-cp-data-operator | awk '{print $1}')
-# control_plane_log=$(kubectl logs -n cpd-meta-ops $POD | sed 's/[[:cntrl:]]\[[0-9;]*m//g' | tail -20)
+# POD=$(oc get pods -n cpd-meta-ops | grep ibm-cp-data-operator | awk '{print $1}')
+# control_plane_log=$(oc logs -n cpd-meta-ops $POD | sed 's/[[:cntrl:]]\[[0-9;]*m//g' | tail -20)
 # address=$(echo $control_plane_log | sed -n 's#.*\(https*://[^"]*\).*#\1#p')
 
 route=$(oc get route -n ${NAMESPACE} cp4i-navigator-pn -o json | jq -r .spec.host)

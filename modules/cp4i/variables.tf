@@ -15,10 +15,12 @@ variable "storageclass" {
 }
 
 variable "entitled_registry_key" {
+  default     = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJJQk0gTWFya2V0cGxhY2UiLCJpYXQiOjE2MzUyMjYxODgsImp0aSI6IjViODdiOGNhZWIwZDQzMmFiNmMwNDM5NGZkZGJkOWE2In0.IBzNGOK9KmWGTWGTo0cA27hJ4-z0XAWlS9Zo8apQqTo"
   description = "Get the entitlement key from https://myibm.ibm.com/products-services/containerlibrary"
 }
 
 variable "entitled_registry_user_email" {
+  default     = "kskhong@au1.ibm.com"
   description = "Docker email address"
 }
 
@@ -27,8 +29,18 @@ variable "namespace" {
   description = "Namespace for Cloud Pak for Integration"
 }
 
+variable "cp4i_version" {
+  description = "Cloud Pak for Integration version"
+}
+
+variable "cp4i_license" {
+  description = "Cloud Pak for Integration license"
+}
+
 locals {
   entitled_registry        = "cp.icr.io"
   entitled_registry_user   = "cp"
   entitled_registry_key    = chomp(var.entitled_registry_key)
+  cp4i_version             = "2021.3.1"
+  cp4i_license             = "L-RJON-C5CSNH" 
 }

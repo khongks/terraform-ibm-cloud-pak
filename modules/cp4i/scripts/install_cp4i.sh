@@ -10,16 +10,16 @@ JOB_NAME="cloud-installer"
 WAITING_TIME=5
 
 echo "Waiting for Ingress domain to be created"
-while [[ -z $(kubectl get route -n openshift-ingress router-default -o jsonpath='{.spec.host}' 2>/dev/null) ]]; do
+while [[ -z $(oc get route -n openshift-ingress router-default -o jsonpath='{.spec.host}' 2>/dev/null) ]]; do
   sleep $WAITING_TIME
 done
 
 # echo "Creating namespace ${NAMESPACE}"
 echo "creating namespace ${NAMESPACE}"
-kubectl create namespace ${NAMESPACE}
+oc create namespace ${NAMESPACE}
 
 echo "Deploying Catalog Option ${CATALOG_CONTENT}"
-kubectl apply -f -<<EOF
+oc apply -f -<<EOF
 ${CATALOG_CONTENT}
 EOF
 
@@ -29,7 +29,7 @@ create_secret() {
   link=$3
 
   echo "Creating secret ${secret_name} on ${namespace} from entitlement key"
-  kubectl create secret docker-registry ${secret_name} \
+  oc create secret docker-registry ${secret_name} \
     --docker-server=${DOCKER_REGISTRY} \
     --docker-username=${DOCKER_USERNAME} \
     --docker-password=${DOCKER_REGISTRY_PASS} \
@@ -44,7 +44,7 @@ create_secret ibm-entitlement-key $NAMESPACE
 sleep 40
 
 echo "Deploying Subscription ${SUBSCRIPTION_CONTENT}"
-kubectl apply -f -<<EOF
+oc apply -f -<<EOF
 ${SUBSCRIPTION_CONTENT}
 EOF
 
@@ -52,7 +52,7 @@ echo "Waiting 10 minutes for operators to install..."
 sleep 600
 
 echo "Deploying Platform Navigator ${NAVIGATOR_CONTENT}"
-kubectl apply -n ${NAMESPACE} -f -<<EOF
+oc apply -n ${NAMESPACE} -f -<<EOF
 ${NAVIGATOR_CONTENT}
 EOF
 
@@ -61,7 +61,7 @@ RUN_LIMIT=200
 i=0
 
 while true; do
-  if ! STATUS_LONG=$(kubectl -n ${NAMESPACE} get platformnavigator cp4i-navigator --output=json | jq -c -r '.status'); then
+  if ! STATUS_LONG=$(oc -n ${NAMESPACE} get platformnavigator cp4i-navigator --output=json | jq -c -r '.status'); then
     echo 'Error getting status'
     exit 1
   fi
