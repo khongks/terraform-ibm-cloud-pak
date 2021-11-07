@@ -30,7 +30,7 @@ variable "namespace" {
 }
 
 variable "cp4i_version" {
-  deefault    = "2021.3.1"
+  default    = "2021.3.1"
   description = "Cloud Pak for Integration version"
 }
 
