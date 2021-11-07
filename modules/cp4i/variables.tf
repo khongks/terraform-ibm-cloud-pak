@@ -45,6 +45,7 @@ locals {
   entitled_registry        = "cp.icr.io"
   entitled_registry_user   = "cp"
   entitled_registry_key    = chomp(var.entitled_registry_key)
+  storageclass             = "var.storageclass"
   cp4i_version             = "var.cp4i_version"
   cp4i_license             = "var.cp4i_license" 
 }
