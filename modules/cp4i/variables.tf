@@ -30,10 +30,12 @@ variable "namespace" {
 }
 
 variable "cp4i_version" {
+  deefault    = "2021.3.1"
   description = "Cloud Pak for Integration version"
 }
 
 variable "cp4i_license" {
+  default     = "L-RJON-C5CSNH"
   description = "Cloud Pak for Integration license"
 }
 
@@ -41,6 +43,6 @@ locals {
   entitled_registry        = "cp.icr.io"
   entitled_registry_user   = "cp"
   entitled_registry_key    = chomp(var.entitled_registry_key)
-  cp4i_version             = "2021.3.1"
-  cp4i_license             = "L-RJON-C5CSNH" 
+  cp4i_version             = "var.cp4i_version"
+  cp4i_license             = "var.cp4i_license" 
 }
