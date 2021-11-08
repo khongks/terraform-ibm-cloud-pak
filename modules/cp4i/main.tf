@@ -5,6 +5,7 @@ locals {
   })
   subscription_content = templatefile("${path.module}/templates/subscription.yaml.tmpl", {
     namespace = var.namespace
+    cp4i_channel_version = var.cp4i_channel_version
   })
   navigator_content = templatefile("${path.module}/templates/navigator.yaml.tmpl", {
     storageclass = var.storageclass

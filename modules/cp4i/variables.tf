@@ -33,6 +33,12 @@ variable "cp4i_version" {
   description = "Cloud Pak for Integration version"
 }
 
+variable "cp4i_channel_version" {
+  default     = "v1.4"
+  type        = string
+  description = "Cloud Pak for Integration channel version"
+}
+
 variable "cp4i_license" {
   default     = "L-RJON-C5CSNH"
   type        = string
