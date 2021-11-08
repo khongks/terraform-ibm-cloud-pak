@@ -45,7 +45,7 @@ resource "null_resource" "install_ace_dashboard" {
   }
 }
 
-data "external" "get_ace_endpoints" {
+data "external" "get_ace_dashboard_endpoints" {
   count = var.enable ? 1 : 0
 
   depends_on = [
