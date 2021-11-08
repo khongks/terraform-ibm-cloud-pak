@@ -14,7 +14,7 @@ WAITING_TIME=5
 #   sleep $WAITING_TIME
 # done
 
-status=$(oc get ns ${NAMESPACE} --ignore-not-found | jq -r .status.phase)
+status=$(oc get ns ${NAMESPACE} --ignore-not-found -ojson | jq -r .status.phase)
 if [[ status != 'Active' ]]; then
   echo "Creating namespace ${NAMESPACE}"
   oc create namespace ${NAMESPACE}
