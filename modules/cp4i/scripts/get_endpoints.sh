@@ -32,5 +32,5 @@ route=$(oc get route -n ${NAMESPACE} cp4i-navigator-pn -o json | jq -r .spec.hos
 pass=$(oc get secret -n ibm-common-services platform-auth-idp-credentials -o json | jq -r '.data.admin_password' | base64 -d)
 user=$(oc get secret -n ibm-common-services platform-auth-idp-credentials -o json | jq -r '.data.admin_username' | base64 -d)
 
-echo $route
+# echo $route
 results "${route}" "${pass}" "${user}"
