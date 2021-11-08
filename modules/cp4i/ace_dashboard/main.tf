@@ -1,7 +1,7 @@
 locals {
-  ace_subscription_content = templatefile("${path.module}/../templates/subscription.yaml.tmpl", {
+  ace_subscription_content = templatefile("${path.module}/../templates/ace_subscription.yaml.tmpl", {
     namespace            = var.ace_dashboard.namespace
-    ace_channel_version  = var.ace_dashboard.channel_version
+    channel_version      = var.ace_dashboard.channel_version
   })
   ace_dashboard_content = templatefile("${path.module}/../templates/ace_dashboard.yaml.tmpl", {
     namespace       = var.ace_dashboard.namespace
@@ -9,8 +9,8 @@ locals {
     use             = var.ace_dashboard.use
     replicas        = var.ace_dashboard.replicas
     storageclass    = var.ace_dashboard.storageclass
-    ace_license     = var.ace_dashboard.license
-    ace_version     = var.ace_dashboard.version
+    license         = var.ace_dashboard.license
+    version         = var.ace_dashboard.version
   })
 }
 
