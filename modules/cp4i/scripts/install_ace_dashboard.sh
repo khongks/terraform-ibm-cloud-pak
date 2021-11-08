@@ -93,3 +93,5 @@ while true; do
     exit 1
   fi
 done
+
+oc get route -n ${NAMESPACE} ${RELEASE_NAME}-ui -o json | jq -r .spec.host
