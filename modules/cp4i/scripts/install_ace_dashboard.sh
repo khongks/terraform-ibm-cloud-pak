@@ -54,8 +54,8 @@ oc apply -f -<<EOF
 ${ACE_SUBSCRIPTION_CONTENT}
 EOF
 
-echo "Waiting 10 minutes for operators to install..."
-sleep 600
+echo "Waiting  minutes for operator to install..."
+sleep 60
 
 echo "Deploying ACE dashboard ${ACE_DASHBOARD_CONTENT}"
 oc apply -n ${NAMESPACE} -f -<<EOF
