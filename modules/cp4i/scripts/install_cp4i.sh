@@ -15,9 +15,7 @@ WAITING_TIME=5
 # done
 
 # echo "Creating namespace ${NAMESPACE}"
-ls -la
-echo ${KUBECONFIG}
-cat ${KUBECONFIG}
+
 echo "creating namespace ${NAMESPACE}"
 oc create namespace ${NAMESPACE}
 
