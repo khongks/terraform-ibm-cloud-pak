@@ -51,7 +51,7 @@ variable "ace_dashboard" {
   description = "ACE dashboard configuration variables"
   type = object({
     namespace = string
-    name = string
+    release_name = string
     use = string
     replicas = string
     storageclass = string
