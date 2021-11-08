@@ -1,0 +1,30 @@
+apiVersion: appconnect.ibm.com/v1beta1
+kind: Dashboard
+metadata:
+  name: ${release_name}
+  namespace: ${namespace}
+spec:
+  license:
+    accept: true
+    license: ${ace_license}
+    use: ${use}
+  logFormat: basic
+  logLevel: info
+  pod:
+    containers:
+      content-server:
+        resources:
+          limits:
+            cpu: 250m
+      control-ui:
+        resources:
+          limits:
+            cpu: 250m
+            memory: 250Mi
+  replicas: ${replicas}
+  storage:
+    class: ${storageclass}
+    size: 5Gi
+    type: persistent-claim
+  useCommonServices: true
+  version: ${ace_version}

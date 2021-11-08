@@ -1,0 +1,8 @@
+namespace           = "cp4i"
+release_name        = "ace-dashboard"
+use                 = "nonproduction"
+replicas            = "1"
+storageclass        = "ocs-storagecluster-cephfs"
+ace_channel_version = "v2.1"
+ace_license         = "L-APEH-C49KZH"
+ace_version         = "12.0.2.0"
