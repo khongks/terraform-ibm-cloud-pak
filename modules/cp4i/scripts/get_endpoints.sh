@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "NAMESPACE: ${NAMESPACE}"
+# echo "NAMESPACE: ${NAMESPACE}"
 
 #eval "$(jq -r '@sh "export KUBECONFIG=\(.kubeconfig) NAMESPACE=\(.namespace)"')"
 
