@@ -45,6 +45,21 @@ variable "cp4i_license" {
   description = "Cloud Pak for Integration license"
 }
 
+## ACE
+
+variable "ace_dashboard" {
+  type = object({
+    namespace = string
+    name = string
+    use = string
+    replicas = string
+    storageclass = string
+    channel_version = string
+    license = string
+    version = string
+  })
+}
+
 locals {
   entitled_registry      = "cp.icr.io"
   entitled_registry_user = "cp"

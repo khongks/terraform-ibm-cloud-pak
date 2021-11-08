@@ -1,16 +1,16 @@
 locals {
   ace_subscription_content = templatefile("${path.module}/templates/subscription.yaml.tmpl", {
-    namespace            = var.namespace
-    ace_channel_version  = var.ace_channel_version
+    namespace            = var.ace_dashboard.namespace
+    ace_channel_version  = var.ace_dashboard.channel_version
   })
   ace_dashboard_content = templatefile("${path.module}/templates/ace_dashboard.yaml.tmpl", {
-    namespace       = var.namespace
-    release_name    = var.release_name
-    use             = var.nonproduction
-    replicas        = var.replicas
-    storageclass    = var.storageclass
-    ace_license     = var.ace_license
-    ace_version     = var.ace_version
+    namespace       = var.ace_dashboard.namespace
+    release_name    = var.ace_dashboard.release_name
+    use             = var.ace_dashboard.use
+    replicas        = var.ace_dashboard.replicas
+    storageclass    = var.ace_dashboard.storageclass
+    ace_license     = var.ace_dashboard.license
+    ace_version     = var.ace_dashboard.version
   })
 }
 
@@ -19,7 +19,7 @@ resource "null_resource" "install_ace_dashboard" {
   count = var.enable ? 1 : 0
 
   triggers = {
-    namespace_sha1        = sha1(var.namespace)
+    namespace_sha1        = sha1(var.ace_dashboard.namespace)
     docker_params_sha1    = sha1(join("", [var.entitled_registry_user_email, local.entitled_registry_key]))
     ace_subscription_sha1 = sha1(local.ace_subscription_content)
     ace_dashboard_sha1    = sha1(local.ace_dashboard_content)
@@ -31,9 +31,9 @@ resource "null_resource" "install_ace_dashboard" {
 
     environment = {
       KUBECONFIG                = var.cluster_config_path
-      NAMESPACE                 = var.namespace
-      STORAGECLASS              = var.storageclass
-      RELEASE_NAME              = var.release_name
+      NAMESPACE                 = var.ace_dashboard.namespace
+      STORAGECLASS              = var.ace_dashboard.storageclass
+      RELEASE_NAME              = var.ace_dashboard.release_name
       ACE_SUBSCRIPTION_CONTENT  = local.ace_subscription_content
       ACE_DASHBOARD_CONTENT     = local.ace_dashboard_content
       DOCKER_REGISTRY_PASS      = local.entitled_registry_key
@@ -56,6 +56,6 @@ data "external" "get_ace_endpoints" {
 
   query = {
     kubeconfig = var.cluster_config_path
-    namespace  = var.namespace
+    namespace  = var.ace_dashboard.namespace
   }
 }
