@@ -19,7 +19,7 @@ results() {
     --arg endpoint "$console_url_address" \
     --arg username "$username" \
     --arg password "$password" \
-    '{ "endpoint": https://$endpoint, "username": $username, "password": $password }'
+    '{ "endpoint": $endpoint, "username": $username, "password": $password }'
 
   exit 0
 }
