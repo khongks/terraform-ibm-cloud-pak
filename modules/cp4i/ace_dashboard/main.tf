@@ -27,7 +27,7 @@ resource "null_resource" "install_ace_dashboard" {
 
   provisioner "local-exec" {
     command     = "./install_ace_dashboard.sh"
-    working_dir = "${path.module}/scripts"
+    working_dir = "${path.module}/../scripts"
 
     environment = {
       KUBECONFIG                = var.cluster_config_path
