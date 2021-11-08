@@ -19,7 +19,6 @@ variable "entitled_registry_key" {
 }
 
 variable "entitled_registry_user_email" {
-  default     = "kskhong@au1.ibm.com"
   description = "Docker email address"
 }
 

@@ -8,6 +8,8 @@ locals {
   })
   navigator_content = templatefile("${path.module}/templates/navigator.yaml.tmpl", {
     storageclass = var.storageclass
+    cp4i_license = var.cp4i_license
+    cp4i_version = var.cp4i_version
   })
 }
 
