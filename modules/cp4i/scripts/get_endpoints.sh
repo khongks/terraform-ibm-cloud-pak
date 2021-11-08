@@ -33,4 +33,4 @@ echo $route
 echo $pass
 echo $user
 
-results "${route}" "${pass}" "${user}"
+# results "${route}" "${pass}" "${user}"
