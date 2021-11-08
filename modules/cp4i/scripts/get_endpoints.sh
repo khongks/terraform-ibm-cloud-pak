@@ -2,7 +2,7 @@
 
 echo "NAMESPACE: ${NAMESPACE}"
 
-eval "$(jq -r '@sh "export KUBECONFIG=\(.kubeconfig) NAMESPACE=\(.namespace)"')"
+#eval "$(jq -r '@sh "export KUBECONFIG=\(.kubeconfig) NAMESPACE=\(.namespace)"')"
 
 # Obtains the credentials and endpoints for the installed CP4I Dashboard
 # results() {
