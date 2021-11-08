@@ -1,10 +1,10 @@
 output "endpoint" {
-  value = ! var.enable ? "" : var.on_vpc ? join("", ibm_container_vpc_cluster.cluster.*.public_service_endpoint_url) : join("", ibm_container_cluster.cluster.*.public_service_endpoint_url)
+  value = !var.enable ? "" : var.on_vpc ? join("", ibm_container_vpc_cluster.cluster.*.public_service_endpoint_url) : join("", ibm_container_cluster.cluster.*.public_service_endpoint_url)
 }
 
 // Used for cp4d output
 output "ingress_hostname" {
-  value = ! var.enable ? "" : var.on_vpc ? join("", ibm_container_vpc_cluster.cluster.*.ingress_hostname) : join("", ibm_container_cluster.cluster.*.ingress_hostname)
+  value = !var.enable ? "" : var.on_vpc ? join("", ibm_container_vpc_cluster.cluster.*.ingress_hostname) : join("", ibm_container_cluster.cluster.*.ingress_hostname)
 }
 
 output "id" {
@@ -12,7 +12,7 @@ output "id" {
 }
 
 output "name" {
-  value = ! var.enable ? "" : var.on_vpc ? join("", ibm_container_vpc_cluster.cluster.*.resource_name) : join("", ibm_container_cluster.cluster.*.resource_name)
+  value = !var.enable ? "" : var.on_vpc ? join("", ibm_container_vpc_cluster.cluster.*.resource_name) : join("", ibm_container_cluster.cluster.*.resource_name)
 }
 
 // output "config" {

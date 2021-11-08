@@ -23,13 +23,13 @@ variable "entitled_registry_user_email" {
 }
 
 variable "namespace" {
-  default = "cp4i"
+  default     = "cp4i"
   description = "Namespace for Cloud Pak for Integration"
 }
 
 variable "cp4i_version" {
-  default    = "2021.3.1"
-  type       = string
+  default     = "2021.3.1"
+  type        = string
   description = "Cloud Pak for Integration version"
 }
 
@@ -46,7 +46,7 @@ variable "cp4i_license" {
 }
 
 locals {
-  entitled_registry        = "cp.icr.io"
-  entitled_registry_user   = "cp"
-  entitled_registry_key    = chomp(var.entitled_registry_key)
+  entitled_registry      = "cp.icr.io"
+  entitled_registry_user = "cp"
+  entitled_registry_key  = chomp(var.entitled_registry_key)
 }

@@ -4,7 +4,7 @@ locals {
     namespace = var.namespace
   })
   subscription_content = templatefile("${path.module}/templates/subscription.yaml.tmpl", {
-    namespace = var.namespace
+    namespace            = var.namespace
     cp4i_channel_version = var.cp4i_channel_version
   })
   navigator_content = templatefile("${path.module}/templates/navigator.yaml.tmpl", {
@@ -15,15 +15,15 @@ locals {
 }
 
 # This section checks to see if the values have been updated through out the script running and is required for any dynamic value
-resource "null_resource" "install_cp4i" {
+resource "c4pi" "install_cp4i" {
   count = var.enable ? 1 : 0
 
   triggers = {
-    namespace_sha1               = sha1(var.namespace)
-    docker_params_sha1           = sha1(join("", [var.entitled_registry_user_email, local.entitled_registry_key]))
-    catalog_sha1                 = sha1(local.catalog_content)
-    subscription_sha1            = sha1(local.subscription_content)
-    navigator_sha1               = sha1(local.navigator_content)
+    namespace_sha1     = sha1(var.namespace)
+    docker_params_sha1 = sha1(join("", [var.entitled_registry_user_email, local.entitled_registry_key]))
+    catalog_sha1       = sha1(local.catalog_content)
+    subscription_sha1  = sha1(local.subscription_content)
+    navigator_sha1     = sha1(local.navigator_content)
   }
 
   provisioner "local-exec" {
@@ -31,17 +31,17 @@ resource "null_resource" "install_cp4i" {
     working_dir = "${path.module}/scripts"
 
     environment = {
-      KUBECONFIG                    = var.cluster_config_path
-      NAMESPACE                     = var.namespace
-      STORAGECLASS                  = var.storageclass
-      CATALOG_CONTENT               = local.catalog_content
-      SUBSCRIPTION_CONTENT          = local.subscription_content
-      NAVIGATOR_CONTENT             = local.navigator_content
-      DOCKER_REGISTRY_PASS          = local.entitled_registry_key
-      DOCKER_USER_EMAIL             = var.entitled_registry_user_email
-      DOCKER_USERNAME               = local.entitled_registry_user
-      DOCKER_REGISTRY               = local.entitled_registry
-      DOCKER_REGISTRY_PASS          = var.entitled_registry_key
+      KUBECONFIG           = var.cluster_config_path
+      NAMESPACE            = var.namespace
+      STORAGECLASS         = var.storageclass
+      CATALOG_CONTENT      = local.catalog_content
+      SUBSCRIPTION_CONTENT = local.subscription_content
+      NAVIGATOR_CONTENT    = local.navigator_content
+      DOCKER_REGISTRY_PASS = local.entitled_registry_key
+      DOCKER_USER_EMAIL    = var.entitled_registry_user_email
+      DOCKER_USERNAME      = local.entitled_registry_user
+      DOCKER_REGISTRY      = local.entitled_registry
+      DOCKER_REGISTRY_PASS = var.entitled_registry_key
     }
   }
 }
@@ -50,7 +50,7 @@ data "external" "get_endpoints" {
   count = var.enable ? 1 : 0
 
   depends_on = [
-    null_resource.install_cp4i
+    cp4i.install_cp4i
   ]
 
   program = ["/bin/bash", "${path.module}/scripts/get_endpoints.sh"]

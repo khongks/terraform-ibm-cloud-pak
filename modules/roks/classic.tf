@@ -1,5 +1,5 @@
 data "external" "vlans" {
-  count   = var.enable && ! var.on_vpc && (length(var.private_vlan_number) + length(var.private_vlan_number) == 0) ? 1 : 0
+  count   = var.enable && !var.on_vpc && (length(var.private_vlan_number) + length(var.private_vlan_number) == 0) ? 1 : 0
   program = ["sh", "-c", "${path.module}/files/vlan.sh ${var.datacenter} -q -ne -o json"]
 }
 
@@ -18,7 +18,7 @@ resource "null_resource" "debug" {
 }
 
 resource "ibm_container_cluster" "cluster" {
-  count                = var.enable && ! var.on_vpc ? 1 : 0
+  count                = var.enable && !var.on_vpc ? 1 : 0
   name                 = "${var.project_name}-${var.environment}-cluster"
   datacenter           = var.datacenter
   default_pool_size    = var.workers_count[0]
@@ -33,7 +33,7 @@ resource "ibm_container_cluster" "cluster" {
   // public_service_endpoint  = true
   // private_service_endpoint = true
 
-  entitlement          = var.entitlement
+  entitlement = var.entitlement
 
   tags = [
     "project:${var.project_name}",
