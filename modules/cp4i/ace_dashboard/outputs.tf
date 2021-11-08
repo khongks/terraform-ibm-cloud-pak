@@ -1,4 +1,4 @@
-output "cp4i_endpoint" {
+output "ace_dashboard_endpoint" {
   depends_on = [
     data.external.get_ace_dashboard_endpoints,
   ]
