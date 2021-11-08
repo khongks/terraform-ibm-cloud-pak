@@ -94,4 +94,4 @@ while true; do
   fi
 done
 
-oc get route -n ${NAMESPACE} ${RELEASE_NAME}-ui -o json | jq -r .spec.host
+oc get route -n ${NAMESPACE} ace-dashboard-ui -o json | jq -r .spec.host
