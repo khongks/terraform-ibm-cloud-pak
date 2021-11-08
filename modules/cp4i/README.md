@@ -112,6 +112,7 @@ terraform apply
 
 ```
 terraform apply -var-file="cp4i.tfvars"
+terraform apply -var-file=ace_dashboard.tfvars -target=ace_dashboard.tf
 ```
 
 ## Clean up
