@@ -18,6 +18,7 @@ status=$(oc get ns ${NAMESPACE} --ignore-not-found -ojson | jq -r .status.phase)
 if [[ ${status} != 'Active' ]]; then
   echo "Creating namespace ${NAMESPACE}"
   oc create namespace ${NAMESPACE}
+  sleep 10
 else
   echo "Namespace ${NAMESPACE} found"
 fi
@@ -37,6 +38,7 @@ create_secret() {
       --docker-password=${DOCKER_REGISTRY_PASS} \
       --docker-email=${DOCKER_USER_EMAIL} \
       --namespace=${namespace}
+    sleep 10
   else
     echo "Secret ${secret_name} already created"
   fi
@@ -46,7 +48,6 @@ create_secret ibm-entitlement-key default
 create_secret ibm-entitlement-key openshift-operators
 create_secret ibm-entitlement-key $NAMESPACE
 
-sleep 40
 
 echo "Deploying Subscription ${ACE_SUBSCRIPTION_CONTENT}"
 oc apply -f -<<EOF
