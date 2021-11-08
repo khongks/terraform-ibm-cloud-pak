@@ -1,9 +1,9 @@
 locals {
-  ace_subscription_content = templatefile("${path.module}/templates/subscription.yaml.tmpl", {
+  ace_subscription_content = templatefile("${path.module}/../templates/subscription.yaml.tmpl", {
     namespace            = var.ace_dashboard.namespace
     ace_channel_version  = var.ace_dashboard.channel_version
   })
-  ace_dashboard_content = templatefile("${path.module}/templates/ace_dashboard.yaml.tmpl", {
+  ace_dashboard_content = templatefile("${path.module}/../templates/ace_dashboard.yaml.tmpl", {
     namespace       = var.ace_dashboard.namespace
     release_name    = var.ace_dashboard.release_name
     use             = var.ace_dashboard.use
@@ -52,7 +52,7 @@ data "external" "get_ace_endpoints" {
     null_resource.install_ace_dashboard
   ]
 
-  program = ["/bin/bash", "${path.module}/scripts/get_ace_dashboard_endpoints.sh"]
+  program = ["/bin/bash", "${path.module}/../scripts/get_ace_dashboard_endpoints.sh"]
 
   query = {
     kubeconfig = var.cluster_config_path
