@@ -27,7 +27,7 @@ create_secret() {
   namespace=$2
   link=$3
 
-  found=(oc get secret ${secret_name} -n ${NAMESPACE} --ignore-not-found -ojson | jq -r .metadata.name)
+  found=$(oc get secret ${secret_name} -n ${NAMESPACE} --ignore-not-found -ojson | jq -r .metadata.name)
   if [[ ${found} != ${secret_name} ]]; then
     echo "Creating secret ${secret_name} on ${NAMESPACE} from entitlement key"
     oc get secret ibm-entitlement-key -n ${NAMESPACE} --ignore-not-found
