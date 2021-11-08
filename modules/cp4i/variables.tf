@@ -48,6 +48,7 @@ variable "cp4i_license" {
 ## ACE
 
 variable "ace_dashboard" {
+  description = "ACE dashboard configuration variables"
   type = object({
     namespace = string
     name = string
