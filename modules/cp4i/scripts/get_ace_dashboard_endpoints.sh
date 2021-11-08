@@ -28,7 +28,7 @@ results() {
 # control_plane_log=$(oc logs -n cpd-meta-ops $POD | sed 's/[[:cntrl:]]\[[0-9;]*m//g' | tail -20)
 # address=$(echo $control_plane_log | sed -n 's#.*\(https*://[^"]*\).*#\1#p')
 echo ${RELEASE_NAME}
-route=$(oc get route -n ${NAMESPACE} ${RELEASE_NAME}-ui -o json | jq -r .spec.host)
+route=$(oc get route -n ${NAMESPACE} ace-dashboard-ui -o json | jq -r .spec.host)
 pass=$(oc get secret -n ibm-common-services platform-auth-idp-credentials -o json | jq -r '.data.admin_password' | base64 -d)
 user=$(oc get secret -n ibm-common-services platform-auth-idp-credentials -o json | jq -r '.data.admin_username' | base64 -d)
 
