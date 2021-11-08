@@ -9,10 +9,10 @@ DOCKER_REGISTRY=${DOCKER_REGISTRY:-cp.icr.io}  # adjust this if needed
 JOB_NAME="cloud-installer"
 WAITING_TIME=5
 
-echo "Waiting for Ingress domain to be created"
-while [[ -z $(oc get route -n openshift-ingress router-default -o jsonpath='{.spec.host}' 2>/dev/null) ]]; do
-  sleep $WAITING_TIME
-done
+# echo "Waiting for Ingress domain to be created"
+# while [[ -z $(oc get route -n openshift-ingress router-default -o jsonpath='{.spec.host}' 2>/dev/null) ]]; do
+#   sleep $WAITING_TIME
+# done
 
 # echo "Creating namespace ${NAMESPACE}"
 echo "creating namespace ${NAMESPACE}"

@@ -38,6 +38,9 @@ resource "null_resource" "install_cp4i" {
       DOCKER_USER_EMAIL             = var.entitled_registry_user_email
       DOCKER_USERNAME               = local.entitled_registry_user
       DOCKER_REGISTRY               = local.entitled_registry
+      DOCKER_REGISTRY_PASS          = var.entitled_registry_key
+      CP4I_VERSION                  = var.cp4i_version
+      CP4I_LICENSE                  = var.cp4i_license
     }
   }
 }

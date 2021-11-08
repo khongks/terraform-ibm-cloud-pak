@@ -15,7 +15,6 @@ variable "storageclass" {
 }
 
 variable "entitled_registry_key" {
-  default     = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJJQk0gTWFya2V0cGxhY2UiLCJpYXQiOjE2MzUyMjYxODgsImp0aSI6IjViODdiOGNhZWIwZDQzMmFiNmMwNDM5NGZkZGJkOWE2In0.IBzNGOK9KmWGTWGTo0cA27hJ4-z0XAWlS9Zo8apQqTo"
   description = "Get the entitlement key from https://myibm.ibm.com/products-services/containerlibrary"
 }
 
@@ -45,7 +44,4 @@ locals {
   entitled_registry        = "cp.icr.io"
   entitled_registry_user   = "cp"
   entitled_registry_key    = chomp(var.entitled_registry_key)
-  storageclass             = "var.storageclass"
-  cp4i_version             = "var.cp4i_version"
-  cp4i_license             = "var.cp4i_license" 
 }
