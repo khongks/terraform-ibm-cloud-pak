@@ -54,7 +54,7 @@ oc apply -f -<<EOF
 ${ACE_SUBSCRIPTION_CONTENT}
 EOF
 
-echo "Waiting  minutes for operator to install..."
+echo "Waiting 1 minute for operator to install..."
 sleep 60
 
 echo "Deploying ACE dashboard ${ACE_DASHBOARD_CONTENT}"
@@ -67,7 +67,7 @@ RUN_LIMIT=200
 i=0
 
 while true; do
-  if ! STATUS_LONG=$(oc -n ${NAMESPACE} get dashboard ${RELEASE_NAME} -ojson | jq -c -r '.status'); then
+  if ! STATUS_LONG=$(oc get dashboard -n ${NAMESPACE} ${RELEASE_NAME} -ojson | jq -c -r '.status'); then
     echo 'Error getting status'
     exit 1
   fi
