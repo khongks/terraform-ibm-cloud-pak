@@ -67,7 +67,7 @@ RUN_LIMIT=200
 i=0
 
 while true; do
-  if ! STATUS_LONG=$(oc get dashboard -n ${NAMESPACE} ${RELEASE_NAME} -ojson | jq -c -r '.status'); then
+  if ! STATUS_LONG=$(oc get dashboard -n ${NAMESPACE} ${RELEASE_NAME}-ui -ojson | jq -c -r '.status'); then
     echo 'Error getting status'
     exit 1
   fi
