@@ -45,9 +45,9 @@ variable "cp4i_license" {
   description = "Cloud Pak for Integration license"
 }
 
-## ACE dashboard
-variable "ace_dashboard" {
-  description = "ACE dashboard configuration variables"
+## ACE designer
+variable "ace_designer" {
+  description = "ACE Designer configuration variables"
   type = object({
     namespace = string
     release_name = string

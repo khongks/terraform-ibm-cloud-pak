@@ -14,6 +14,12 @@ variable "storageclass" {
   description = "Storage class to use.  If VPC, set to `portworx-rwx-gp3-sc` and make sure Portworx is set up on cluster"
 }
 
+variable "old_storageclass" {
+  default     = "managed-nfs-storage"
+  type        = string
+  description = "Old storage class"
+}
+
 variable "entitled_registry_key" {
   description = "Get the entitlement key from https://myibm.ibm.com/products-services/containerlibrary"
 }
@@ -22,9 +28,9 @@ variable "entitled_registry_user_email" {
   description = "Docker email address"
 }
 
-variable "namespace" {
-  default     = "cp4i"
-  description = "Namespace for Cloud Pak for Integration"
+variable "operator_namespace" {
+  default     = "openshift-operators"
+  description = "Namespace for operators for CP4I"
 }
 
 variable "cp4i_version" {
@@ -45,19 +51,14 @@ variable "cp4i_license" {
   description = "Cloud Pak for Integration license"
 }
 
-## ACE
+## CP4I
 
-variable "ace_dashboard" {
-  description = "ACE dashboard configuration variables"
+variable platform_nav {
+  description = "Platform navigator configuration variables"
   type = object({
-    namespace = string
-    release_name = string
-    use = string
-    replicas = string
-    storageclass = string
+    namespace       = string
+    release_name    = string
     channel_version = string
-    license = string
-    version = string
   })
 }
 

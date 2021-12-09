@@ -1,7 +1,15 @@
-cluster_config_path          = "/root/auth/kubeconfig"
+# cluster_config_path          = "/root/auth/kubeconfig"
+cluster_config_path          = "/Users/khongks/.kube/config"
 entitled_registry_user_email = "kskhong@au1.ibm.com"
 entitled_registry_key        = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJJQk0gTWFya2V0cGxhY2UiLCJpYXQiOjE2MzUyMjYxODgsImp0aSI6IjViODdiOGNhZWIwZDQzMmFiNmMwNDM5NGZkZGJkOWE2In0.IBzNGOK9KmWGTWGTo0cA27hJ4-z0XAWlS9Zo8apQqTo"
-storageclass                 = "ocs-storagecluster-cephfs"
+storageclass                 = "ibmc-file-gold-gid"
+old_storageclass             = "managed-nfs-storage"
 cp4i_version                 = "2021.3.1"
 cp4i_channel_version         = "v1.4"
 cp4i_license                 = "L-RJON-C5CSNH"
+operator_namespace           = "openshift-operators"
+platform_nav = {
+    namespace                = "cp4i"
+    release_name             = "integration-navigator"
+    channel_version          = "v5.1"
+}

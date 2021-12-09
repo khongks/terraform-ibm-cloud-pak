@@ -45,18 +45,20 @@ variable "cp4i_license" {
   description = "Cloud Pak for Integration license"
 }
 
-## ACE dashboard
-variable "ace_dashboard" {
-  description = "ACE dashboard configuration variables"
+## APIC
+
+variable "apic" {
+  description = "APIC configuration variables"
   type = object({
     namespace = string
     release_name = string
     use = string
-    replicas = string
     storageclass = string
     channel_version = string
     license = string
     version = string
+    profile = string
+    test_and_monitor = bool
   })
 }
 

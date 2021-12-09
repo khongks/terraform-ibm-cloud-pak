@@ -22,9 +22,9 @@ variable "entitled_registry_user_email" {
   description = "Docker email address"
 }
 
-variable "operator_namespace" {
-  default     = "openshift-operators"
-  description = "Namespace for operators for CP4I"
+variable "namespace" {
+  default     = "cp4i"
+  description = "Namespace for Cloud Pak for Integration"
 }
 
 variable "cp4i_version" {
@@ -45,9 +45,10 @@ variable "cp4i_license" {
   description = "Cloud Pak for Integration license"
 }
 
-## ACE dashboard
-variable "ace_dashboard" {
-  description = "ACE dashboard configuration variables"
+## MQ
+
+variable "mq" {
+  description = "MQ configuration variables"
   type = object({
     namespace = string
     release_name = string

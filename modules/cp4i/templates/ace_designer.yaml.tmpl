@@ -1,0 +1,24 @@
+apiVersion: appconnect.ibm.com/v1beta1
+kind: DesignerAuthoring
+metadata:
+  name: ${release_name}
+  namespace: ${namespace}
+spec:
+  license:
+    accept: true
+    license: ${license}
+    use: ${use}
+  couchdb:
+    replicas: 1
+    storage:
+      class: ${storageclass}
+      size: 10Gi
+      type: persistent-claim
+  designerMappingAssist:
+    enabled: true
+    incrementalLearning:
+      schedule: Every 15 days
+  useCommonServices: true
+  designerFlowsOperationMode: local
+  version: ${version}
+  replicas: 1

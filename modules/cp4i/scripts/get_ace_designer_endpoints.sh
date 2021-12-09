@@ -2,7 +2,7 @@
 
 # echo "NAMESPACE: ${NAMESPACE}"
 NAMESPACE=${NAMESPACE:-cp4i}
-RELEASE_NAME=${RELEASE_NAME:-ace-dashboard}
+RELEASE_NAME=${RELEASE_NAME:-ace-designer}
 
 eval "$(jq -r '@sh "export KUBECONFIG=\(.kubeconfig) NAMESPACE=\(.namespace)"')"
 

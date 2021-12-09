@@ -21,20 +21,17 @@ EOF
 
 wait_for_subscription ${OPERATOR_NAMESPACE} ${SUB_NAME}
 
-echo "Deploying ACE dashboard ${ACE_DASHBOARD_CONTENT}"
+echo "Deploying ACE dashboard ${ACE_DESIGNER_CONTENT}"
 oc apply -n ${ACE_NAMESPACE} -f -<<EOF
-${ACE_DASHBOARD_CONTENT}
+${ACE_DESIGNER_CONTENT}
 EOF
 
 SLEEP_TIME="60"
 RUN_LIMIT=200
 i=0
 
-echo "ACE_NAMESPACE: ${ACE_NAMESPACE}"
-echo "RELEASE_NAME: ${RELEASE_NAME}"
-
 while true; do
-  if ! STATUS_LONG=$(oc get dashboard -n ${ACE_NAMESPACE} ${RELEASE_NAME} -ojson | jq -c -r '.status'); then
+  if ! STATUS_LONG=$(oc get DesignerAuthoring -n ${ACE_NAMESPACE} ${RELEASE_NAME} -ojson | jq -c -r '.status'); then
     echo 'Error getting status'
     exit 1
   fi

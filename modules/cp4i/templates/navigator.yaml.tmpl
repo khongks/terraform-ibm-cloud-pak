@@ -2,12 +2,15 @@ apiVersion: integration.ibm.com/v1beta1
 kind: PlatformNavigator
 metadata:
     name: cp4i-navigator
+    namespace: ${namespace}
 spec:
     license:
         accept: true
-        license: ${ cp4i_license }
+        license: ${cp4i_license}
+    requestIbmServices:
+        licensing: true
     mqDashboard: true
-    replicas: 3
-    version: ${ cp4i_version }
+    replicas: 1
     storage:
-        class: ${ storageclass }
+        class: ${storageclass}
+    version: ${cp4i_version}

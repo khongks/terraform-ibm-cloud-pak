@@ -1,0 +1,17 @@
+apiVersion: apiconnect.ibm.com/v1beta1
+kind: APIConnectCluster
+metadata:
+  name: ${release_name}
+  namespace: ${namespace}
+spec:
+  version: ${version}
+  license:
+    accept: true
+    license: ${license}
+    metric: VIRTUAL_PROCESSOR_CORE
+    use: ${use}
+  profile: ${profile}
+  storageClassName: ${storageclass}
+  management:
+    testAndMonitor:
+      enabled: ${test_and_monitor}
