@@ -5,8 +5,8 @@ source ${DIR}/commons.sh
 
 # Optional input parameters with default values:
 SUB_NAME=${SUBSCRIPTION_NAME:-ibm-appconnect}
-ACE_NAMESPACE=${ACE_NAMESPACE:-ace}
 OPERATOR_NAMESPACE=${OPERATOR_NAMESPACE:-openshift-operators}
+ACE_NAMESPACE=${ACE_NAMESPACE:-ace}
 DEBUG=${DEBUG:-false}
 DOCKER_REGISTRY_USERNAME=${DOCKER_USERNAME:-cp}
 DOCKER_REGISTRY=${DOCKER_REGISTRY:-cp.icr.io}  # adjust this if needed

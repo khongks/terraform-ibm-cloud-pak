@@ -5,8 +5,8 @@ source ${DIR}/commons.sh
 
 # Optional input parameters with default values:
 SUB_NAME=${SUBSCRIPTION_NAME:-ibm-apiconnect}
-APIC_NAMESPACE=${APIC_NAMESPACE:-apic}
 OPERATOR_NAMESPACE=${OPERATOR_NAMESPACE:-openshift-operators}
+APIC_NAMESPACE=${APIC_NAMESPACE:-apic}
 DEBUG=${DEBUG:-false}
 DOCKER_REGISTRY_USERNAME=${DOCKER_USERNAME:-cp}
 DOCKER_REGISTRY=${DOCKER_REGISTRY:-cp.icr.io}  # adjust this if needed

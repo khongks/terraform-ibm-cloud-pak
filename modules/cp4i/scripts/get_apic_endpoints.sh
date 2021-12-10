@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NAMESPACE=${NAMESPACE:-apic}
-RELEASE_NAME=${RELEASE_NAME:-apiccluster}
+RELEASE_NAME=${RELEASE_NAME:-apicluster}
 
 eval "$(jq -r '@sh "export KUBECONFIG=\(.kubeconfig) NAMESPACE=\(.namespace)"')"
 
@@ -29,10 +29,10 @@ results() {
   exit 0
 }
 
-cloud_admin_ui=$(oc get route -n apic apiccluster-mgmt-admin -o json | jq -r .spec.host)
-api_manager_ui=$(oc get route -n apic apiccluster-mgmt-api-manager -o json | jq -r .spec.host)
-consumer_api=$(oc get route -n apic apiccluster-mgmt-consumer-api -o json | jq -r .spec.host)
-platform_api=$(oc get route -n apic apiccluster-mgmt-platform-api -o json | jq -r .spec.host)
+cloud_admin_ui=https://$(oc get route -n ${NAMESPACE} ${RELEASE_NAME}-mgmt-admin -o json | jq -r .spec.host)
+api_manager_ui=https://$(oc get route -n ${NAMESPACE} ${RELEASE_NAME}-mgmt-api-manager -o json | jq -r .spec.host)
+consumer_api=https://$(oc get route -n ${NAMESPACE} ${RELEASE_NAME}-mgmt-consumer-api -o json | jq -r .spec.host)
+platform_api=https://$(oc get route -n ${NAMESPACE} ${RELEASE_NAME}-mgmt-platform-api -o json | jq -r .spec.host)
 pass=$(oc get secret -n ibm-common-services platform-auth-idp-credentials -o json | jq -r '.data.admin_password' | base64 -d)
 user=$(oc get secret -n ibm-common-services platform-auth-idp-credentials -o json | jq -r '.data.admin_username' | base64 -d)
 
