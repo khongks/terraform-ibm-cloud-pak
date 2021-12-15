@@ -24,7 +24,7 @@ variable "entitled_registry_user_email" {
 
 variable "operator_namespace" {
   default     = "openshift-operators"
-  description = "Namespace for Cloud Pak for Integration"
+  description = "Namespace for operators for CP4I"
 }
 
 variable "cp4i_version" {
@@ -45,10 +45,10 @@ variable "cp4i_license" {
   description = "Cloud Pak for Integration license"
 }
 
-## MQ
+## EMM
 
-variable "mq" {
-  description = "MQ configuration variables"
+variable "emm" {
+  description = "EMM configuration variables"
   type = object({
     namespace = string
     release_name = string
@@ -57,7 +57,8 @@ variable "mq" {
     channel_version = string
     license = string
     version = string
-    domain = string
+    profile = string
+    test_and_monitor = bool
   })
 }
 

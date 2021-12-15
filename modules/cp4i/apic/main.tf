@@ -6,7 +6,7 @@ locals {
     source               = "ibm-operator-catalog"
     source_namespace     = "openshift-marketplace"
   })
-  apic_content = templatefile("${path.module}/../templates/apic.yaml.tmpl", {
+  apic_content = templatefile("${path.module}/../templates/apic/apic.yaml.tmpl", {
     namespace         = var.apic.namespace
     release_name      = var.apic.release_name
     use               = var.apic.use

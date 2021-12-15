@@ -1,20 +1,20 @@
-output "mq_console_endpoint" {
+output "mq_endpoint" {
   depends_on = [
-    data.external.get_mq_console_endpoints,
+    data.external.get_mq_endpoints,
   ]
-  value = var.enable && length(data.external.get_mq_console_endpoints) > 0 ? data.external.get_mq_console_endpoints.0.result.endpoint : ""
+  value = var.enable && length(data.external.get_mq_endpoints) > 0 ? data.external.get_mq_endpoints.0.result.endpoint : ""
 }
 
 output "cp4i_user" {
   depends_on = [
     data.external.get_mq_endpoints,
   ]
-  value = var.enable && length(data.external.get_mq_console_endpoints) > 0 ? data.external.get_mq_console_endpoints.0.result.username : ""
+  value = var.enable && length(data.external.get_mq_endpoints) > 0 ? data.external.get_mq_endpoints.0.result.username : ""
 }
 
 output "cp4i_password" {
   depends_on = [
     data.external.get_mq_endpoints,
   ]
-  value = var.enable && length(data.external.get_mq_console_endpoints) > 0 ? data.external.get_mq_console_dashboard_endpoints.0.result.password : ""
+  value = var.enable && length(data.external.get_mq_endpoints) > 0 ? data.external.get_mq_endpoints.0.result.password : ""
 }

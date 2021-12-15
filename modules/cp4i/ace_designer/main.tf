@@ -7,7 +7,7 @@ locals {
     source_namespace     = "openshift-marketplace"
   })
 
-  ace_designer_content = templatefile("${path.module}/../templates/ace_designer.yaml.tmpl", {
+  ace_designer_content = templatefile("${path.module}/../templates/ace/ace_designer.yaml.tmpl", {
     namespace           = var.ace_designer.namespace
     release_name        = var.ace_designer.release_name
     use                 = var.ace_designer.use

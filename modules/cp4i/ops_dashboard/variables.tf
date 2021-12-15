@@ -45,19 +45,18 @@ variable "cp4i_license" {
   description = "Cloud Pak for Integration license"
 }
 
-## MQ
+## ops_dashboard
 
-variable "mq" {
-  description = "MQ configuration variables"
+variable "ops_dashboard" {
+  description = "Operation dashboard configuration variables"
   type = object({
     namespace = string
     release_name = string
-    use = string
-    storageclass = string
+    file_storageclass = string
+    block_storageclass = string
     channel_version = string
     license = string
     version = string
-    domain = string
   })
 }
 

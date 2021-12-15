@@ -24,7 +24,7 @@ variable "entitled_registry_user_email" {
 
 variable "operator_namespace" {
   default     = "openshift-operators"
-  description = "Namespace for Cloud Pak for Integration"
+  description = "Namespace for operators for CP4I"
 }
 
 variable "cp4i_version" {
@@ -45,19 +45,18 @@ variable "cp4i_license" {
   description = "Cloud Pak for Integration license"
 }
 
-## MQ
+## aspera
 
-variable "mq" {
-  description = "MQ configuration variables"
+variable "aspera" {
+  description = "Aspera configuration variables"
   type = object({
     namespace = string
     release_name = string
     use = string
     storageclass = string
     channel_version = string
-    license = string
     version = string
-    domain = string
+    aspera_key = string
   })
 }
 

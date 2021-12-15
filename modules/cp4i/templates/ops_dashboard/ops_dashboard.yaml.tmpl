@@ -1,0 +1,21 @@
+apiVersion: integration.ibm.com/v1beta2
+kind: OperationsDashboard
+metadata:
+  labels:
+    app.kubernetes.io/instance: ibm-integration-operations-dashboard
+    app.kubernetes.io/managed-by: ibm-integration-operations-dashboard
+    app.kubernetes.io/name: ibm-integration-operations-dashboard
+  name: ${release_name}
+  namespace: ${namespace}
+spec:
+  license:
+    accept: true
+    license: ${license}
+  version: ${version}
+  storage:
+    configDbVolume:
+      class: ${file_storageclass}
+    sharedVolume:
+      class: ${file_storageclass}
+    tracingVolume:
+      class: ${block_storageclass}

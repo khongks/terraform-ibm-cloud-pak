@@ -1,48 +1,21 @@
 locals {
-  mq_subscription_content = templatefile("${path.module}/../templates/mq_subscription.yaml.tmpl", {
-    namespace            = var.mq.namespace
+  mq_subscription_content = templatefile("${path.module}/../templates/subscription.yaml.tmpl", {
+    sub_name             = "ibm-mq"
+    namespace            = var.operator_namespace
     channel_version      = var.mq.channel_version
+    source               = "ibm-operator-catalog"
+    source_namespace     = "openshift-marketplace"
   })
-mq_content = templatefile("${path.module}/../templates/mq.yaml.tmpl", {
+
+  mq_content = templatefile("${path.module}/../templates/mq/smallqm.yaml.tmpl", {
     namespace       = var.mq.namespace
     release_name    = var.mq.release_name
     use             = var.mq.use
-    replicas        = var.mq.replicas
     storageclass    = var.mq.storageclass
     license         = var.mq.license
     version         = var.mq.version
+    domain          = var.mq.domain
   })
-}
-
-# This section checks to see if the values have been updated through out the script running and is required for any dynamic value
-resource "null_resource" "create_mqsc_cmap" {
-  count = var.enable ? 1 : 0
-
-  triggers = {
-    namespace_sha1        = sha1(var.mq.namespace)
-    docker_params_sha1    = sha1(join("", [var.entitled_registry_user_email, local.entitled_registry_key]))
-    mq_subscription_sha1 = sha1(local.mq_content)
-    mq_sha1    = sha1(local.mq_content)
-  }
-
-  provisioner "local-exec" {
-    command     = "./create_mqsc_cmap.sh"
-    working_dir = "${path.module}/../scripts"
-
-    environment = {
-      KUBECONFIG                = var.cluster_config_path
-      NAMESPACE                 = var.mq.namespace
-      STORAGECLASS              = var.mq.storageclass
-      RELEASE_NAME              = var.mq.release_name
-      MQ_SUBSCRIPTION_CONTENT   = local.mq_content
-      MQ_CONTENT                = local.mq
-      DOCKER_REGISTRY_PASS      = local.entitled_registry_key
-      DOCKER_USER_EMAIL         = var.entitled_registry_user_email
-      DOCKER_USERNAME           = local.entitled_registry_user
-      DOCKER_REGISTRY           = local.entitled_registry
-      DOCKER_REGISTRY_PASS      = var.entitled_registry_key
-    }
-  }
 }
 
 # This section checks to see if the values have been updated through out the script running and is required for any dynamic value
@@ -52,8 +25,8 @@ resource "null_resource" "install_mq" {
   triggers = {
     namespace_sha1        = sha1(var.mq.namespace)
     docker_params_sha1    = sha1(join("", [var.entitled_registry_user_email, local.entitled_registry_key]))
-    mq_subscription_sha1 = sha1(local.mq_content)
-    mq_sha1    = sha1(local.mq_content)
+    mq_subscription_sha1  = sha1(local.mq_subscription_content)
+    mq_content_sha1       = sha1(local.mq_content)
   }
 
   provisioner "local-exec" {
@@ -61,17 +34,18 @@ resource "null_resource" "install_mq" {
     working_dir = "${path.module}/../scripts"
 
     environment = {
-      KUBECONFIG                = var.cluster_config_path
-      NAMESPACE                 = var.mq.namespace
-      STORAGECLASS              = var.mq.storageclass
-      RELEASE_NAME              = var.mq.release_name
-      ACE_SUBSCRIPTION_CONTENT  = local.mq_content
-      ACE_DASHBOARD_CONTENT     = local.mq
-      DOCKER_REGISTRY_PASS      = local.entitled_registry_key
-      DOCKER_USER_EMAIL         = var.entitled_registry_user_email
-      DOCKER_USERNAME           = local.entitled_registry_user
-      DOCKER_REGISTRY           = local.entitled_registry
-      DOCKER_REGISTRY_PASS      = var.entitled_registry_key
+      KUBECONFIG                 = var.cluster_config_path
+      OPERATOR_NAMESPACE         = var.operator_namespace
+      MQ_NAMESPACE               = var.mq.namespace
+      STORAGECLASS               = var.mq.storageclass
+      RELEASE_NAME               = var.mq.release_name
+      SUBSCRIPTION_NAME          = "ibm-mq"
+      MQ_SUBSCRIPTION_CONTENT    = local.mq_subscription_content
+      MQ_CONTENT                 = local.mq_content
+      DOCKER_REGISTRY_PASSWORD   = local.entitled_registry_key
+      DOCKER_REGISTRY_USER_EMAIL = var.entitled_registry_user_email
+      DOCKER_REGISTRY_USERNAME   = local.entitled_registry_user
+      DOCKER_REGISTRY            = local.entitled_registry
     }
   }
 }
@@ -80,7 +54,6 @@ data "external" "get_mq_endpoints" {
   count = var.enable ? 1 : 0
 
   depends_on = [
-    null_resource.create_mqsc_cmap,
     null_resource.install_mq
   ]
 
@@ -89,5 +62,6 @@ data "external" "get_mq_endpoints" {
   query = {
     kubeconfig = var.cluster_config_path
     namespace  = var.mq.namespace
+    release_name = var.mq.release_name
   }
 }

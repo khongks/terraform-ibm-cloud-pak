@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# echo "NAMESPACE: ${NAMESPACE}"
-NAMESPACE=${NAMESPACE:-cp4i}
-RELEASE_NAME=${RELEASE_NAME:-ace-dashboard}
+NAMESPACE=${NAMESPACE:-mq}
+RELEASE_NAME=${RELEASE_NAME:-smallqm}
 
 eval "$(jq -r '@sh "export KUBECONFIG=\(.kubeconfig) NAMESPACE=\(.namespace)"')"
 
@@ -28,7 +27,8 @@ results() {
 # POD=$(oc get pods -n cpd-meta-ops | grep ibm-cp-data-operator | awk '{print $1}')
 # control_plane_log=$(oc logs -n cpd-meta-ops $POD | sed 's/[[:cntrl:]]\[[0-9;]*m//g' | tail -20)
 # address=$(echo $control_plane_log | sed -n 's#.*\(https*://[^"]*\).*#\1#p')
-route=$(oc get route -n ${NAMESPACE} ace-dashboard-ui -o json | jq -r .spec.host)
+route=$(oc get queuemanager ${RELEASE_NAME} -n ${NAMESPACE} -ojson | jq -r .status.adminUiUrl)
+# route="${RELEASE_NAME} ${NAMESPACE} ${KUBECONFIG}"
 pass=$(oc get secret -n ibm-common-services platform-auth-idp-credentials -o json | jq -r '.data.admin_password' | base64 -d)
 user=$(oc get secret -n ibm-common-services platform-auth-idp-credentials -o json | jq -r '.data.admin_username' | base64 -d)
 

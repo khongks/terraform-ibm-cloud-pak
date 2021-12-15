@@ -1,0 +1,23 @@
+apiVersion: eventendpointmanager.apiconnect.ibm.com/v1beta1
+kind: EventEndpointManager
+metadata:
+  name: ${release_name}
+  namespace: ${namespace}
+  labels: {
+    app.kubernetes.io/instance: "${release_name}",
+    app.kubernetes.io/managed-by: "ibm-apiconnect",
+    app.kubernetes.io/name: "${release_name}"
+  }
+spec:
+  endpointTypes:
+    - Events
+  license:
+    accept: true
+    # L-RJON-BZEP9N
+    license: ${license}
+    metric: VIRTUAL_PROCESSOR_CORE
+    use: ${use}
+  profile: ${profile}
+  storageClassName: ${storageclass}
+  # "10.0.3.0-ifix1"
+  version: ${version}
