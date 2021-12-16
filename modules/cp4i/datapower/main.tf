@@ -10,11 +10,9 @@ locals {
     namespace         = var.dp.namespace
     release_name      = var.dp.release_name
     use               = var.dp.use
-    profile           = var.dp.profile
     storageclass      = var.dp.storageclass
     license           = var.dp.license
     version           = var.dp.version
-    test_and_monitor  = var.dp.test_and_monitor
   })
 }
 

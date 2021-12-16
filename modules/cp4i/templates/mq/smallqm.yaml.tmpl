@@ -6,8 +6,8 @@ metadata:
 data:
   config.mqsc: |-
     DEFINE QL(APPQ)
-    DEFINE CHANNEL(SMALLQMGRCHL) CHLTYPE(SVRCONN) TRPTYPE(TCP) SSLCAUTH(OPTIONAL) SSLCIPH('ANY_TLS12_OR_HIGHER')
-    SET chlauth(SMALLQMGRCHL) TYPE(BLOCKUSER) USERLIST(NOBODY)
+    DEFINE CHANNEL(${channel_name}) CHLTYPE(SVRCONN) TRPTYPE(TCP) SSLCAUTH(OPTIONAL) SSLCIPH('ANY_TLS12_OR_HIGHER')
+    SET CHLAUTH(${channel_name}) TYPE(BLOCKUSER) USERLIST(NOBODY)
     REFRESH SECURITY TYPE(CONNAUTH)
 ---
 kind: Secret
@@ -41,14 +41,16 @@ spec:
   web:
     enabled: true
   queueManager:
-    type: ephemeral
     resources:
       limits:
-        cpu: 100m
-        memory: "350Mi"
+        cpu: 500m
+        memory: 1Gi
       requests:
-        cpu: 100m
-        memory: "256Mi"
+        cpu: 500m
+        memory: 1Gi
+    name: ${qmgr_name}
+    availability:
+      type: SingleInstance
     mqsc:
       - configMap:
           name: ${release_name}-cm
@@ -57,7 +59,9 @@ spec:
     storage:
       defaultClass: ibmc-block-gold
       persistedData:
-        enabled: false
+        enabled: true
+        size: 2Gi
+        type: persistent-claim
       queueManager:
         size: 2Gi
         type: persistent-claim
@@ -74,31 +78,15 @@ spec:
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name: mq-traffic-mq-${release_name}-ibm-mq-qm
+  name: mq-traffic-mq-${channel_name_lower}-ibm-mq-qm
   namespace: ${namespace}
 spec:
-  host: ${release_name}chl.chl.mq.ibm.com
+  host: ${channel_name_lower}.chl.mq.ibm.com
   to:
     kind: Service
     name: ${release_name}-ibm-mq
   port:
     targetPort: 1414
-  tls:
-    termination: passthrough
-  wildcardPolicy: None
----
-kind: Route
-apiVersion: route.openshift.io/v1
-metadata:
-  name: ${release_name}-console
-  namespace: ${namespace}
-spec:
-  host: ${release_name}-console.${domain}
-  to:
-    kind: Service
-    name: ${release_name}-ibm-mq
-  port:
-    targetPort: 9443
   tls:
     termination: passthrough
   wildcardPolicy: None

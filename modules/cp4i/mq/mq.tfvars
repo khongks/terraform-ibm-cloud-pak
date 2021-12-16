@@ -15,5 +15,6 @@ mq = {
     channel_version       = "v1.6"
     license               = "L-RJON-BZFQU2"
     version               = "9.2.3.0-r1"
-    domain                = "itzroks-3100015379-vysdfy-6ccd7f378ae819553d37d5f2ee142bd6-0000.au-syd.containers.appdomain.cloud"
+    qmgr_name             = "SMALLQM"
+    channel_name          = "SMALLQMCHL"
 }

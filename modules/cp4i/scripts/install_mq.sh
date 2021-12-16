@@ -27,32 +27,9 @@ oc apply -n ${MQ_NAMESPACE} -f -<<EOF
 ${MQ_CONTENT}
 EOF
 
-SLEEP_TIME="60"
-RUN_LIMIT=200
-i=0
+wait_for ${RELEASE_NAME} QueueManager ${MQ_NAMESPACE} "Running"
 
-while true; do
+host=$(oc get route ${RELEASE_NAME}-ibm-mq-qm -n ${MQ_NAMESPACE} -ojson | jq -r '.spec.host')
 
-  if ! STATUS=$(oc get QueueManager -n ${MQ_NAMESPACE} ${RELEASE_NAME} -ojson | jq -c -r '.status.phase'); then
-    echo 'Error getting status'
-    exit 1
-  fi
-  echo "Installation status: $STATUS"
-  if [ "$STATUS" == "Running" ]; then
-    break
-  fi
-  
-  if [ "$STATUS" == "Failed" ]; then
-    echo '=== Installation has failed ==='
-    exit 1
-  fi
-  
-  echo "Sleeping $SLEEP_TIME seconds..."
-  sleep $SLEEP_TIME
-  
-  (( i++ ))
-  if [ "$i" -eq "$RUN_LIMIT" ]; then
-    echo 'Timed out'
-    exit 1
-  fi
-done
+echo ${host}
+echo ${MQ_CCDT_CONTENT} | sed -e "s/{{HOST}}/${host}/g" | jq . > ${DIR}/../mq/test/ccdt.json

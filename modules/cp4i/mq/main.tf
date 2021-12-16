@@ -14,7 +14,15 @@ locals {
     storageclass    = var.mq.storageclass
     license         = var.mq.license
     version         = var.mq.version
-    domain          = var.mq.domain
+    qmgr_name       = var.mq.qmgr_name
+    channel_name    = var.mq.channel_name
+    channel_name_lower = lower(var.mq.channel_name)
+  })
+
+  mq_ccdt_content = templatefile("${path.module}/../templates/mq/ccdt.json.tmpl", {
+    qmgr_name            = var.mq.qmgr_name
+    channel_name         = var.mq.channel_name
+    host                 = "{{HOST}}"
   })
 }
 
@@ -42,6 +50,7 @@ resource "null_resource" "install_mq" {
       SUBSCRIPTION_NAME          = "ibm-mq"
       MQ_SUBSCRIPTION_CONTENT    = local.mq_subscription_content
       MQ_CONTENT                 = local.mq_content
+      MQ_CCDT_CONTENT            = local.mq_ccdt_content
       DOCKER_REGISTRY_PASSWORD   = local.entitled_registry_key
       DOCKER_REGISTRY_USER_EMAIL = var.entitled_registry_user_email
       DOCKER_REGISTRY_USERNAME   = local.entitled_registry_user

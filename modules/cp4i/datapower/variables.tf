@@ -57,8 +57,6 @@ variable "dp" {
     channel_version = string
     license = string
     version = string
-    profile = string
-    test_and_monitor = bool
   })
 }
 

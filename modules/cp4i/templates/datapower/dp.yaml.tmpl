@@ -6,23 +6,28 @@ metadata:
 spec:
   license:
     accept: true
-    license: ${license}
-    # L-RJON-BYDR3Q
     use: ${use}
-    #nonproduction
+    license: ${license}
+  replicas: 1
   resources:
     limits:
-      memory: 4Gi
+      memory: 8Gi
     requests:
       cpu: 1
       memory: 4Gi
+  version: ${version}
   users:
     - name: admin
       accessLevel: privileged
-      passwordSecret: dp-admin-secret
-  version: ${version}
-  # 10.0-cd
-  replicas: 1
+      passwordSecret: admin-credentials
+  domains:
+  - name: app
+    certs:
+    dpApp:
+      config:
+      - app-config
+      local:
+      - app-local
 ---
 apiVersion: datapower.ibm.com/v1beta2
 kind: DataPowerMonitor

@@ -1,0 +1,20 @@
+{
+  "channel": [
+    {
+      "name": "SMALLQMCHL",
+      "clientConnection": {
+        "connection": [
+          {
+            "host": "smallqm-ibm-mq-qm-mq.itzroks-3100015379-vysdfy-6ccd7f378ae819553d37d5f2ee142bd6-0000.au-syd.containers.appdomain.cloud",
+            "port": 443
+          }
+        ],
+        "queueManager": "smallqm"
+      },
+      "transmissionSecurity": {
+        "cipherSpecification": "ANY_TLS12_OR_HIGHER"
+      },
+      "type": "clientConnection"
+    }
+  ]
+}

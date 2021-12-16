@@ -10,10 +10,7 @@ dp = {
     use                   = "nonproduction"
 #    storageclass          = "ocs-storagecluster-cephfs"
     storageclass          = "ibmc-block-gold"
-    channel_version       = "v2.3"
-    license               = "L-RJON-C2YLGB"
-    version               = "10.0.3.0"
-    profile               = "n1xc10.m48"
-#   profile               = "n3xc14.m48"
-    test_and_monitor      = "false"
+    channel_version       = "v1.4"
+    license               = "L-RJON-C2XKPU"
+    version               = "10.0-cd"
 }

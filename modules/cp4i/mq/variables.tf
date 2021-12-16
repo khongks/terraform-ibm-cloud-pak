@@ -57,7 +57,8 @@ variable "mq" {
     channel_version = string
     license = string
     version = string
-    domain = string
+    qmgr_name = string
+    channel_name = string
   })
 }
 

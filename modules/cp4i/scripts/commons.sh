@@ -56,13 +56,50 @@ function create_secret() {
   found=$(oc get secret ${secret_name} -n ${namespace} --ignore-not-found -ojson | jq -r .metadata.name)
   if [[ ${found} != ${secret_name} ]]; then
     echo "Creating secret ${secret_name} on ${namespace} from entitlement key"
-    oc get secret ibm-entitlement-key -n ${namespace} --ignore-not-found
+    # oc get secret ibm-entitlement-key -n ${namespace} --ignore-not-found
     oc create secret docker-registry ${secret_name} \
       --docker-server=${docker_registry} \
       --docker-username=${docker_registry_username} \
       --docker-password=${docker_registry_password} \
       --docker-email=${docker_registry_user_email} \
       --namespace=${namespace}
+    sleep 10
+  else
+    echo "Secret ${secret_name} already created"
+  fi
+}
+
+function create_secret_for_userpass() {
+  secret_name=$1
+  namespace=$2
+  user=$3
+  pass=$4
+
+  if [ -z "${secret_name}" ]; then
+    echo "ERROR: missing secret_name"
+    exit 1;
+  fi
+  if [ -z "${namespace}" ]; then
+    echo "ERROR: missing namespace argument, make sure to pass namespace, ex: '-n mynamespace'"
+    exit 1;
+  fi
+  if [ -z "${user}" ]; then
+    echo "ERROR: missing user"
+    exit 1;
+  fi
+  if [ -z "${pass}" ]; then
+    echo "ERROR: missing pass"
+    exit 1;
+  fi
+
+  echo "oc create secret generic ${secret_name} -n ${namespace} --from-literal=password=${pass}"
+
+  found=$(oc get secret ${secret_name} -n ${namespace} --ignore-not-found -ojson | jq -r .metadata.name)
+  if [[ ${found} != ${secret_name} ]]; then
+    echo "Creating secret ${secret_name} on ${namespace} from user pass"
+    oc create secret generic ${secret_name} -n ${namespace} \
+       --from-literal=password=${pass} 
+    # oc get secret ibm-entitlement-key -n ${namespace} --ignore-not-found
     sleep 10
   else
     echo "Secret ${secret_name} already created"
@@ -226,4 +263,43 @@ EOF
     echo "INFO: retrying subscription ${NAME}";
     create_subscription ${NAMESPACE} ${SOURCE} ${NAME} ${CHANNEL} true
   fi
+}
+
+function wait_for () {
+  OBJ_NAME=${1}
+  OBJ_TYPE=${2}
+  OBJ_NAMESPACE=${3}
+  OBJ_READY_STATUS=$4
+
+  echo "Waiting for [${OBJ_NAME}] of type [${OBJ_TYPE}] in namespace [${OBJ_NAMESPACE}] to be in [${OBJ_READY_STATUS}] status"
+
+  SLEEP_TIME="60"
+  RUN_LIMIT=200
+  i=0
+
+  while true; do
+
+    if ! STATUS=$(oc get ${OBJ_TYPE} -n ${OBJ_NAMESPACE} ${OBJ_NAME} -ojson | jq -c -r '.status.phase'); then
+      echo 'Error getting status'
+      exit 1
+    fi
+    echo "Installation status: $STATUS"
+    if [ "$STATUS" == ${OBJ_READY_STATUS} ]; then
+      break
+    fi
+    
+    if [ "$STATUS" == "Failed" ]; then
+      echo '=== Installation has failed ==='
+      exit 1
+    fi
+    
+    echo "Sleeping $SLEEP_TIME seconds..."
+    sleep $SLEEP_TIME
+    
+    (( i++ ))
+    if [ "$i" -eq "$RUN_LIMIT" ]; then
+      echo 'Timed out'
+      exit 1
+    fi
+  done
 }
