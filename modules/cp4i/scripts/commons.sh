@@ -137,7 +137,7 @@ function update_pull_secret() {
   oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson
 }
 
-maxWaitTime=1800
+maxWaitTime=2400
 
 ### print a formatted time in minutes and seconds from the given input in seconds
 function output_time {
